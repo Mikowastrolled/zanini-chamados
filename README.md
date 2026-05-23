@@ -8,6 +8,8 @@ Backend inicial da API **Zanini-Chamados**, criado com Node.js, Express e MySQL.
 - Express
 - MySQL
 - mysql2
+- JWT
+- bcrypt
 - dotenv
 - cors
 - nodemon
@@ -23,21 +25,26 @@ Backend inicial da API **Zanini-Chamados**, criado com Node.js, Express e MySQL.
 |   |   |-- database.js
 |   |   `-- env.js
 |   |-- controllers/
+|   |   |-- authController.js
 |   |   |-- clientController.js
 |   |   |-- healthController.js
 |   |   `-- ticketController.js
 |   |-- middlewares/
+|   |   |-- authMiddleware.js
 |   |   |-- errorHandler.js
 |   |   `-- notFoundHandler.js
 |   |-- models/
+|   |   |-- adminModel.js
 |   |   |-- clientModel.js
 |   |   `-- ticketModel.js
 |   |-- routes/
+|   |   |-- authRoutes.js
 |   |   |-- clientRoutes.js
 |   |   |-- healthRoutes.js
 |   |   |-- index.js
 |   |   `-- ticketRoutes.js
 |   |-- services/
+|   |   |-- authService.js
 |   |   |-- clientService.js
 |   |   `-- ticketService.js
 |   `-- app.js
@@ -77,6 +84,9 @@ DB_PORT=3306
 DB_USER=root
 DB_PASSWORD=
 DB_NAME=zanini_chamados
+JWT_SECRET=troque_este_segredo_em_producao
+JWT_EXPIRES_IN=8h
+BCRYPT_SALT_ROUNDS=10
 ```
 
 4. Execute o script SQL inicial:
@@ -107,15 +117,67 @@ Por padrao, a API sobe em:
 http://localhost:3000/api
 ```
 
-## Rotas iniciais
+## Rotas da API
 
-### Saude da API
+### Rotas publicas
 
 ```http
 GET /api/health
+POST /api/auth/register
+POST /api/auth/login
 ```
 
-Retorna o status da API e valida uma consulta simples no banco.
+`GET /api/health` retorna o status da API e valida uma consulta simples no banco.
+
+Cadastro de admin:
+
+```http
+POST /api/auth/register
+Content-Type: application/json
+
+{
+  "nome": "Admin Zanini",
+  "email": "admin@zanini.com.br",
+  "senha": "senha123"
+}
+```
+
+Login:
+
+```http
+POST /api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@zanini.com.br",
+  "senha": "senha123"
+}
+```
+
+As respostas de cadastro e login retornam o admin sem a senha e um token JWT:
+
+```json
+{
+  "data": {
+    "admin": {
+      "id": 1,
+      "nome": "Admin Zanini",
+      "email": "admin@zanini.com.br",
+      "created_at": "2026-05-23T00:00:00.000Z",
+      "updated_at": "2026-05-23T00:00:00.000Z"
+    },
+    "token": "jwt..."
+  }
+}
+```
+
+### Rotas protegidas
+
+As rotas de clientes e chamados exigem o header:
+
+```http
+Authorization: Bearer SEU_TOKEN_JWT
+```
 
 ### Chamados
 
@@ -200,23 +262,51 @@ Exemplo de atualizacao:
 
 Antes de testar, configure o `.env`, execute `npm run db:init` e suba a API com `npm run dev`.
 
-1. Listar clientes:
+1. Registrar admin:
+
+```http
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+  "nome": "Admin Zanini",
+  "email": "admin@zanini.com.br",
+  "senha": "senha123"
+}
+```
+
+2. Fazer login e copiar o token retornado:
+
+```http
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@zanini.com.br",
+  "senha": "senha123"
+}
+```
+
+3. Listar clientes:
 
 ```http
 GET http://localhost:3000/api/clientes
+Authorization: Bearer SEU_TOKEN_JWT
 ```
 
-2. Buscar cliente por ID:
+4. Buscar cliente por ID:
 
 ```http
 GET http://localhost:3000/api/clientes/1
+Authorization: Bearer SEU_TOKEN_JWT
 ```
 
-3. Criar cliente:
+5. Criar cliente:
 
 ```http
 POST http://localhost:3000/api/clientes
 Content-Type: application/json
+Authorization: Bearer SEU_TOKEN_JWT
 
 {
   "nome": "Joao Souza",
@@ -228,11 +318,12 @@ Content-Type: application/json
 }
 ```
 
-4. Atualizar cliente:
+6. Atualizar cliente:
 
 ```http
 PUT http://localhost:3000/api/clientes/1
 Content-Type: application/json
+Authorization: Bearer SEU_TOKEN_JWT
 
 {
   "nome": "Joao Souza",
@@ -244,17 +335,19 @@ Content-Type: application/json
 }
 ```
 
-5. Deletar cliente:
+7. Deletar cliente:
 
 ```http
 DELETE http://localhost:3000/api/clientes/1
+Authorization: Bearer SEU_TOKEN_JWT
 ```
 
-6. Validar erro de campos obrigatorios:
+8. Validar erro de campos obrigatorios:
 
 ```http
 POST http://localhost:3000/api/clientes
 Content-Type: application/json
+Authorization: Bearer SEU_TOKEN_JWT
 
 {
   "nome": "",
@@ -273,11 +366,10 @@ Resposta esperada: status `400` com a mensagem `nome e telefone sao obrigatorios
 - `src/controllers`: recebe requisicoes HTTP e devolve respostas.
 - `src/services`: concentra regras de negocio e validacoes.
 - `src/models`: executa consultas no banco de dados.
-- `src/middlewares`: trata erros e rotas inexistentes.
+- `src/middlewares`: autentica requisicoes, trata erros e rotas inexistentes.
 
 ## Proximos passos sugeridos
 
-- Adicionar autenticacao e autorizacao.
 - Criar migrations versionadas.
 - Adicionar validacao com Joi, Zod ou Yup.
 - Criar testes automatizados.

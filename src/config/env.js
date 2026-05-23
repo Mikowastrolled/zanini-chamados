@@ -13,6 +13,11 @@ const env = {
     password: process.env.DB_PASSWORD || '',
     name: process.env.DB_NAME || 'zanini_chamados',
   },
+  auth: {
+    jwtSecret: process.env.JWT_SECRET || 'zanini_chamados_dev_secret',
+    jwtExpiresIn: process.env.JWT_EXPIRES_IN || '8h',
+    bcryptSaltRounds: Number(process.env.BCRYPT_SALT_ROUNDS) || 10,
+  },
 };
 
 module.exports = { env };
