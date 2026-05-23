@@ -15,7 +15,7 @@ const pages = {
 const getRoute = () => window.location.hash.replace('#/', '') || 'dashboard';
 
 const setDocumentTitle = (title) => {
-  document.title = `${title} | Zanini Chamados`;
+  document.title = `${title} | Zanini Ar Condicionado`;
 };
 
 const renderProtectedPage = async (route) => {

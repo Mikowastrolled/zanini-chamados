@@ -5,21 +5,21 @@ import { showToast } from '../components/toast.js';
 const loginTemplate = () => `
   <main class="auth-page">
     <section class="auth-art">
-      <a class="brand auth-brand" href="#/login" aria-label="Zanini Chamados">
+      <a class="brand auth-brand" href="#/login" aria-label="Zanini Ar Condicionado">
         <img src="./assets/zanini-mark.svg" alt="" />
         <span>
           <strong>Zanini</strong>
-          <small>Chamados</small>
+          <small>Ar Condicionado</small>
         </span>
       </a>
       <div class="auth-copy">
-        <span class="eyebrow">Zanini Ar Condicionados</span>
-        <h1>Operacao tecnica com controle, velocidade e clareza.</h1>
-        <p>Clientes, chamados e prioridades em um painel unico para a equipe administrativa.</p>
+        <span class="eyebrow">Zanini Ar Condicionado</span>
+        <h1>Controle tecnico para climatizacao eficiente.</h1>
+        <p>Gerencie clientes, chamados tecnicos, instalacoes e manutencoes em um painel unico para a Zanini Ar Condicionado.</p>
       </div>
       <div class="auth-metrics">
-        <div><strong>24h</strong><span>acompanhamento</span></div>
-        <div><strong>JWT</strong><span>acesso seguro</span></div>
+        <div><strong>Ar frio</strong><span>conforto termico</span></div>
+        <div><strong>Equipe</strong><span>assistencia tecnica</span></div>
         <div><strong>API</strong><span>localhost:3000</span></div>
       </div>
     </section>

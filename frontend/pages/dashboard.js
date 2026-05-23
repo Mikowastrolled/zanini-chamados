@@ -28,32 +28,39 @@ const ticketRow = (ticket) => `
   </tr>
 `;
 
+const countByTerms = (tickets, terms) =>
+  tickets.filter((ticket) => {
+    const searchableText = normalizeText(`${ticket.equipamento || ''} ${ticket.descricao || ''}`);
+    return terms.some((term) => searchableText.includes(term));
+  }).length;
+
 const renderDashboardData = (tickets, clients) => {
   const openTickets = tickets.filter((ticket) => ticket.status !== 'concluido' && ticket.status !== 'cancelado');
-  const urgentTickets = tickets.filter((ticket) => ticket.prioridade === 'urgente');
-  const finishedTickets = tickets.filter((ticket) => ticket.status === 'concluido');
+  const installationTickets = countByTerms(tickets, ['instalacao', 'instalacoes', 'instalar']);
+  const maintenanceTickets = countByTerms(tickets, ['manutencao', 'manutencoes', 'revisao']);
+  const cleaningTickets = countByTerms(tickets, ['higienizacao', 'higienizacoes', 'higienizar', 'limpeza']);
   const latestTickets = tickets.slice(0, 8);
 
   document.querySelector('[data-dashboard-stats]').innerHTML = `
-    <article class="stat-card accent-teal">
-      <span>Chamados abertos</span>
-      <strong>${openTickets.length}</strong>
-      <small>${pluralize(openTickets.length, 'pendente operacional', 'pendentes operacionais')}</small>
-    </article>
-    <article class="stat-card accent-amber">
-      <span>Urgentes</span>
-      <strong>${urgentTickets.length}</strong>
-      <small>${pluralize(urgentTickets.length, 'prioridade critica', 'prioridades criticas')}</small>
-    </article>
     <article class="stat-card accent-blue">
-      <span>Clientes</span>
-      <strong>${clients.length}</strong>
-      <small>${pluralize(clients.length, 'cadastro ativo', 'cadastros ativos')}</small>
+      <span>Instalacoes</span>
+      <strong>${installationTickets}</strong>
+      <small>${pluralize(installationTickets, 'servico identificado', 'servicos identificados')}</small>
     </article>
-    <article class="stat-card accent-green">
-      <span>Concluidos</span>
-      <strong>${finishedTickets.length}</strong>
-      <small>historico recente</small>
+    <article class="stat-card accent-cyan">
+      <span>Manutencoes</span>
+      <strong>${maintenanceTickets}</strong>
+      <small>${pluralize(maintenanceTickets, 'atendimento preventivo', 'atendimentos preventivos')}</small>
+    </article>
+    <article class="stat-card accent-frost">
+      <span>Higienizacoes</span>
+      <strong>${cleaningTickets}</strong>
+      <small>${pluralize(cleaningTickets, 'servico de ar limpo', 'servicos de ar limpo')}</small>
+    </article>
+    <article class="stat-card accent-teal">
+      <span>Chamados tecnicos</span>
+      <strong>${openTickets.length}</strong>
+      <small>${pluralize(openTickets.length, 'em acompanhamento', 'em acompanhamento')}</small>
     </article>
   `;
 
@@ -94,10 +101,10 @@ const renderDashboardData = (tickets, clients) => {
 export const dashboardPage = {
   route: 'dashboard',
   title: 'Dashboard',
-  subtitle: 'Visao geral dos chamados, prioridades e clientes.',
+  subtitle: 'Controle tecnico para climatizacao eficiente.',
   actions: `
     <a class="button button-secondary" href="#/clientes">Clientes</a>
-    <a class="button button-primary" href="#/chamados">Novo chamado</a>
+    <a class="button button-primary" href="#/chamados">Abrir chamado tecnico</a>
   `,
   content: `
     <section class="grid stats-grid" data-dashboard-stats>
@@ -109,11 +116,11 @@ export const dashboardPage = {
     <section class="section-panel">
       <div class="section-heading">
         <div>
-          <h2>Chamados recentes</h2>
-          <span>Ultimas movimentacoes registradas pela API</span>
+          <h2>Chamados tecnicos recentes</h2>
+          <span>Instalacoes, manutencoes e assistencias em andamento</span>
         </div>
         <div class="search-field">
-          <input type="search" placeholder="Buscar chamados" data-dashboard-search />
+          <input type="search" placeholder="Buscar cliente, equipamento ou servico" data-dashboard-search />
         </div>
       </div>
       <div data-dashboard-table>

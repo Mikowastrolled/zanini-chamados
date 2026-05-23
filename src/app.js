@@ -7,7 +7,22 @@ const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
 
-app.use(cors({ origin: env.corsOrigin }));
+const isAllowedOrigin = (origin) => !origin || env.corsOrigins.includes('*') || env.corsOrigins.includes(origin);
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (isAllowedOrigin(origin)) {
+      return callback(null, true);
+    }
+
+    const error = new Error('Origem nao permitida pelo CORS.');
+    error.statusCode = 403;
+    return callback(error);
+  },
+  credentials: env.corsCredentials,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use('/api', routes);

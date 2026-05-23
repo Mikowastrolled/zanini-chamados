@@ -1,6 +1,6 @@
-# Frontend Zanini Chamados
+# Frontend Zanini Ar Condicionado
 
-Painel administrativo em HTML, CSS e JavaScript puro para consumir a API do backend Zanini Chamados.
+Painel administrativo em HTML, CSS e JavaScript puro para a Zanini Ar Condicionado consumir a API de clientes e chamados tecnicos.
 
 ## Como abrir
 
@@ -42,10 +42,10 @@ zanini_chamados_token
 
 1. O usuario faz login em `/api/auth/login`.
 2. O token JWT fica salvo no navegador.
-3. O dashboard carrega clientes e chamados protegidos.
-4. A area de clientes permite listar, criar, editar e excluir.
-5. A area de chamados permite listar, filtrar, criar e alterar status.
-6. Ao criar um chamado, o cliente pode ser selecionado da base cadastrada; o frontend preenche nome, telefone e email para manter compatibilidade com a API atual.
+3. O dashboard carrega clientes e chamados tecnicos protegidos.
+4. A area de clientes permite listar, criar, editar e excluir cadastros da base de atendimento.
+5. A area de chamados permite listar, filtrar, criar e alterar status de instalacoes, manutencoes, higienizacoes e assistencias tecnicas.
+6. Ao criar um chamado tecnico, o cliente pode ser selecionado da base cadastrada; o frontend preenche nome, telefone e email para manter compatibilidade com a API atual.
 7. O logout remove o token e bloqueia o painel.
 
 ## Estrutura

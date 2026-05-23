@@ -179,13 +179,13 @@ const confirmDelete = (client) => {
 export const clientesPage = {
   route: 'clientes',
   title: 'Clientes',
-  subtitle: 'Cadastro completo de clientes da Zanini.',
+  subtitle: 'Clientes atendidos pela Zanini Ar Condicionado.',
   actions: '<button class="button button-primary" type="button" data-new-client>Novo cliente</button>',
   content: `
     <section class="section-panel">
       <div class="section-heading">
         <div>
-          <h2>Base de clientes</h2>
+          <h2>Base de clientes de climatizacao</h2>
           <span data-client-count>Carregando clientes</span>
         </div>
         <div class="search-field">

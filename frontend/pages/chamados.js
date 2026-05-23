@@ -37,7 +37,7 @@ const ticketRow = (ticket) => `
 `;
 
 const renderTable = () => {
-  document.querySelector('[data-ticket-count]').textContent = `${filteredTickets.length} chamados`;
+  document.querySelector('[data-ticket-count]').textContent = `${filteredTickets.length} chamados tecnicos`;
   document.querySelector('[data-ticket-table]').innerHTML = `
     <div class="table-wrap">
       <table>
@@ -122,8 +122,8 @@ const ticketForm = () => {
         <input id="ticket-cliente-email" name="clienteEmail" type="email" />
       </div>
       <div class="field">
-        <label for="ticket-equipamento">Equipamento</label>
-        <input id="ticket-equipamento" name="equipamento" placeholder="Split 12000 BTUs" />
+        <label for="ticket-equipamento">Equipamento de climatizacao</label>
+        <input id="ticket-equipamento" name="equipamento" placeholder="Split 12000 BTUs, cassete ou janela" />
       </div>
       <div class="field">
         <label for="ticket-prioridade">Prioridade</label>
@@ -138,8 +138,8 @@ const ticketForm = () => {
         <input id="ticket-tecnico" name="tecnicoResponsavel" />
       </div>
       <div class="field field-wide">
-        <label for="ticket-descricao">Descricao</label>
-        <textarea id="ticket-descricao" name="descricao" rows="4" required></textarea>
+        <label for="ticket-descricao">Descricao do servico</label>
+        <textarea id="ticket-descricao" name="descricao" rows="4" placeholder="Instalacao, manutencao, higienizacao ou chamado tecnico" required></textarea>
       </div>
     </div>
   `;
@@ -176,7 +176,7 @@ const getTicketPayload = (form) => {
 const openTicketModal = () => {
   const form = ticketForm();
   const modal = openModal({
-    title: 'Novo chamado',
+    title: 'Novo chamado tecnico',
     body: form,
     size: 'large',
     actions: [
@@ -192,7 +192,7 @@ const openTicketModal = () => {
           try {
             await ticketService.create(getTicketPayload(form));
             close();
-            showToast('Chamado criado.', 'success');
+            showToast('Chamado tecnico criado.', 'success');
             await loadTickets();
             applyFilters();
           } catch (error) {
@@ -219,19 +219,19 @@ const updateTicketStatus = async (ticketId, status) => {
 
 export const chamadosPage = {
   route: 'chamados',
-  title: 'Chamados',
-  subtitle: 'Acompanhe solicitacoes, prioridades e andamento tecnico.',
-  actions: '<button class="button button-primary" type="button" data-new-ticket>Novo chamado</button>',
+  title: 'Chamados tecnicos',
+  subtitle: 'Acompanhe instalacoes, manutencoes, higienizacoes e assistencias tecnicas.',
+  actions: '<button class="button button-primary" type="button" data-new-ticket>Novo chamado tecnico</button>',
   content: `
     <section class="section-panel">
       <div class="section-heading with-filters">
         <div>
-          <h2>Fila de chamados</h2>
-          <span data-ticket-count>Carregando chamados</span>
+          <h2>Fila tecnica de climatizacao</h2>
+          <span data-ticket-count>Carregando chamados tecnicos</span>
         </div>
         <div class="filters-row">
           <div class="search-field">
-            <input type="search" placeholder="Buscar chamado" data-ticket-search />
+            <input type="search" placeholder="Buscar cliente, equipamento ou servico" data-ticket-search />
           </div>
           <select data-ticket-status-filter aria-label="Filtrar por status">
             <option value="">Todos status</option>

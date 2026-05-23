@@ -2,10 +2,29 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
+const defaultCorsOrigins = [
+  'http://localhost:5500',
+  'http://127.0.0.1:5500',
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+];
+
+const parseCorsOrigins = (value) => {
+  if (!value) {
+    return [];
+  }
+
+  return value
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+};
+
 const env = {
   nodeEnv: process.env.NODE_ENV || 'development',
   port: Number(process.env.PORT) || 3000,
-  corsOrigin: process.env.CORS_ORIGIN || '*',
+  corsOrigins: Array.from(new Set([...defaultCorsOrigins, ...parseCorsOrigins(process.env.CORS_ORIGIN)])),
+  corsCredentials: process.env.CORS_CREDENTIALS === 'true',
   database: {
     host: process.env.DB_HOST || 'localhost',
     port: Number(process.env.DB_PORT) || 3306,

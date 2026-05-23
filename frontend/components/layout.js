@@ -3,7 +3,7 @@ import { clearSession, getAdmin } from '../js/storage.js';
 const navigation = [
   { route: 'dashboard', label: 'Dashboard', icon: 'D' },
   { route: 'clientes', label: 'Clientes', icon: 'C' },
-  { route: 'chamados', label: 'Chamados', icon: 'T' },
+  { route: 'chamados', label: 'Chamados tecnicos', icon: 'T' },
 ];
 
 export const renderShell = ({ activeRoute, title, subtitle, actions = '', content = '' }) => {
@@ -18,11 +18,11 @@ export const renderShell = ({ activeRoute, title, subtitle, actions = '', conten
   return `
     <div class="app-shell">
       <aside class="sidebar">
-        <a class="brand" href="#/dashboard" aria-label="Zanini Chamados">
+        <a class="brand" href="#/dashboard" aria-label="Zanini Ar Condicionado">
           <img src="./assets/zanini-mark.svg" alt="" />
           <span>
             <strong>Zanini</strong>
-            <small>Chamados</small>
+            <small>Ar Condicionado</small>
           </span>
         </a>
         <nav class="sidebar-nav" aria-label="Navegacao principal">
@@ -50,7 +50,7 @@ export const renderShell = ({ activeRoute, title, subtitle, actions = '', conten
       <main class="main-area">
         <header class="topbar">
           <div>
-            <p class="page-kicker">Painel administrativo</p>
+            <p class="page-kicker">Zanini Ar Condicionado</p>
             <h1>${title}</h1>
             <span>${subtitle}</span>
           </div>
